@@ -247,14 +247,14 @@ A Telegram Music+Video Streaming bot with some useful features.
 All commands can be used with: / """
 
 
-@app.on_message(filters.command("help") & filters.private)
-async def help_command(_, message):
+@app.on_message(filters.command("vchelp") & filters.private)
+async def vchelp_command(_, message):
     text, keyboard = await help_parser(message.from_user.mention)
     await app.send_message(message.chat.id, text, reply_markup=keyboard)
 
 
-@app.on_message(filters.command("start") & filters.private)
-async def start_command(_, message):
+@app.on_message(filters.command("vcstart") & filters.private)
+async def vcstart_command(_, message):
     if len(message.text.split()) > 1:
         name = (message.text.split(None, 1)[1]).lower()
         if name[0] == "s":
@@ -300,8 +300,8 @@ async def start_command(_, message):
                     LOG_GROUP_ID,
                     f"{message.from_user.mention} has just started bot to check <code>SUDOLIST</code>\n\n**USER ID:** {sender_id}\n**USER NAME:** {sender_name}",
                 )
-        if name == "help":
-            text, keyboard = await help_parser(message.from_user.mention)
+        if name == "lovely":
+            text, keyboard = await lovely_parser(message.from_user.mention)
             await message.delete()
             return await app.send_text(
                 message.chat.id,
@@ -418,14 +418,14 @@ async def search_helper_mess(_, CallbackQuery):
     )
 
 
-@app.on_callback_query(filters.regex(r"help_(.*?)"))
+@app.on_callback_query(filters.regex(r"lovely_(.*?)"))
 async def help_button(client, query):
-    home_match = re.match(r"help_home\((.+?)\)", query.data)
-    mod_match = re.match(r"help_module\((.+?)\)", query.data)
-    prev_match = re.match(r"help_prev\((.+?)\)", query.data)
-    next_match = re.match(r"help_next\((.+?)\)", query.data)
-    back_match = re.match(r"help_back", query.data)
-    create_match = re.match(r"help_create", query.data)
+    home_match = re.match(r"lovely_home\((.+?)\)", query.data)
+    mod_match = re.match(r"lovely_module\((.+?)\)", query.data)
+    prev_match = re.match(r"lovely_prev\((.+?)\)", query.data)
+    next_match = re.match(r"lovely_next\((.+?)\)", query.data)
+    back_match = re.match(r"lovely_back", query.data)
+    create_match = re.match(r"lovely_create", query.data)
     top_text = f"""Hello {query.from_user.first_name},
 
 Click on the buttons for more information.
@@ -453,10 +453,10 @@ All commands can be used with: /
             [
                 [
                     InlineKeyboardButton(
-                        text="↪️ Back", callback_data="help_back"
+                        text="Back", callback_data="lovely_back"
                     ),
                     InlineKeyboardButton(
-                        text="🔄 Close", callback_data="close"
+                        text="Home", callback_data="lovelyx_back"
                     ),
                 ],
             ]
@@ -480,7 +480,7 @@ All commands can be used with: /
         await query.message.edit(
             text=top_text,
             reply_markup=InlineKeyboardMarkup(
-                paginate_modules(curr_page - 1, HELPABLE, "help")
+                paginate_modules(curr_page - 1, HELPABLE, "lovely")
             ),
             disable_web_page_preview=True,
         )
@@ -490,7 +490,7 @@ All commands can be used with: /
         await query.message.edit(
             text=top_text,
             reply_markup=InlineKeyboardMarkup(
-                paginate_modules(next_page + 1, HELPABLE, "help")
+                paginate_modules(next_page + 1, HELPABLE, "lovely")
             ),
             disable_web_page_preview=True,
         )
@@ -499,7 +499,7 @@ All commands can be used with: /
         await query.message.edit(
             text=top_text,
             reply_markup=InlineKeyboardMarkup(
-                paginate_modules(0, HELPABLE, "help")
+                paginate_modules(0, HELPABLE, "lovely")
             ),
             disable_web_page_preview=True,
         )
